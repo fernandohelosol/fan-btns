@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #centerButton {
+            background-color: #3498db;
+            color: #fff;
+            height: 80px;
+            width: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .outerButtons {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin: 0;
+            padding: 0;
+            background-color: red;
+            height: 40px;
+            width: 40px;
+        }
+
+        .outerButton {
+            position: absolute;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            padding: 0px;
+            margin: 0px;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            /* Initially set opacity to 0 */
+        }
+
+        .show {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="centerButton">
+        <div class="outerButtons"></div>
+    </div>
+
+    <script>
+        const centerButton = document.getElementById('centerButton');
+        const outerButtonsContainer = document.querySelector('.outerButtons');
+
+        // Function to convert degrees to radians
+        function degreesToRadians(degrees) {
+            return degrees * (Math.PI / 180);
+        }
+
+        // Function to create outer buttons in a semi-circular formation with an offset in degrees
+        function createOuterButtons(numButtons = 3, startOffsetDegrees = 90, radius = 200) {
+            const angleIncrement = (Math.PI * 1) / numButtons;
+            const startOffsetRadians = degreesToRadians(startOffsetDegrees);
+
+            for (let i = 0; i < numButtons + 1; i++) {
+                const angle = startOffsetRadians + i * angleIncrement;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+
+                const outerButton = document.createElement('div');
+                outerButton.classList.add('outerButton');
+                outerButton.classList.add('show');
+                outerButton.style.left = `${x}px`;
+                outerButton.style.top = `${y}px`;
+                outerButton.style.opacity = '0'; // Initially set opacity to 0
+                outerButtonsContainer.appendChild(outerButton);
+            }
+        }
+
+        // Create 10 outer buttons with a start offset in degrees (adjust as needed)
+        createOuterButtons(); // Starts from the top
+
+        // Function to toggle visibility of outer buttons with animation
+        function toggleOuterButtons() {
+            const outerButtons = document.querySelectorAll('.outerButton');
+            outerButtons.forEach((button, index) => {
+                setTimeout(() => {
+                    button.style.opacity = button.style.opacity === '0' ? '1' : '0';
+                    button.classList.toggle('show');
+                }, index * 100);
+            })
+        }
+
+        // Toggle visibility of outer buttons on center button click
+        centerButton.addEventListener('click', toggleOuterButtons);
+    </script>
+</body>
+
+</html>
